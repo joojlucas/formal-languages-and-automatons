@@ -1,0 +1,190 @@
+\documentclass[12pt]{article}
+
+% ----------------------------------------- Dados do discente
+% Insira os seus dados e do exercício escolhido:
+\def\discente{João Lucas Rodrigues Soares}
+\def\matricula{202003580}
+\def\ua{05}
+\def\myling{{40}} % Informe o número da linguagem selecionada.
+
+% ------------------------------------------ Babel & Geometry
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,top=0.5cm,bottom=1.5cm,left=1.5cm,right=1.5cm,nohead,nofoot]{geometry}
+%
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage{tcolorbox}
+
+\usepackage{tikz}
+\usetikzlibrary{automata,shapes,arrows,positioning}
+\tikzset{
+ node distance=2.5cm,
+ initial text={$M_{\mathcal{L}_\myling}$},
+ double distance=1pt,
+ every state/.style={semithick,fill=blue!20!white,minimum size=20pt,inner sep=0pt},
+ every edge/.style={draw,->,>=stealth,auto,semithick,font=\ttfamily\small},
+ accept/.style={accepting,fill=green!20!white},
+ reject/.style={fill=red!20!white},
+ slopea/.style={sloped,anchor=center,above},
+ slopeb/.style={sloped,anchor=center,below}
+}
+
+%\newcommand{\concatL}{\ensuremath{{\scriptstyle\circ}}}%
+
+\begin{document}
+% ------------------------------------------------- Cabeçalho
+ \begin{tcolorbox}[rounded corners, colback=blue!3, colframe=blue!40!black]
+  \footnotesize\textbf{Universidade Federal de Goiás -- UFG}\hfill \textsc{Linguagens Formais e Autômatos -- 2022/2}\\
+  \footnotesize\textbf{Instituto de Informática -- INF\hfill Prof. Humberto J. Longo} -- \scriptsize\texttt{longo@inf.ufg.br}
+ \end{tcolorbox}\bigskip
+%
+% ------------------------------------------------- Atividade
+\begin{tcolorbox}[rounded corners, colback=blue!2, colframe=blue!40!black, title=\textbf{Atividade AA-\ua\ -- \discente\ (\matricula)}]
+ Nesta tarefa deve-se propor um autômato finito determinístico (DFA) resultante do produto $\otimes$ do DFA mínimo que reconhece a linguagem $\mathcal{L}_{par}$ (abaixo especificada) com um DFA que reconheça as cadeias da linguagem $\mathcal{L}$ selecionada. Especifique a tupla que define o DFA resultante da operação $\otimes$ e desenhe o correspondente diagrama de estados. (Cada aluno(a) deve consultar na descrição da atividade AA-\ua, na disciplina INF0333A da plataforma Turing, qual é a linguagem associada ao seu número de matrícula. A descrição da linguagem está disponível no arquivo ``Lista de linguagens regulares'' da Seção ``Coletânea de exercícios''.)
+\end{tcolorbox}\bigskip
+%
+% ------------------------------------ Resolução do exercício
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={$\mathcal{L}_{par}=\{w\in\{0,1\}^*\mid |w|=2\cdot k,\ k\in\mathbb{N}\}$}]
+ \begin{itemize}[leftmargin=*]
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   
+  \item Autômato finito determinístico que reconhece as cadeias pertencentes à linguagem $\mathcal{L}_{par}$:
+   \begin{center}
+   \begin{tikzpicture}[
+    initial text={$M_{\mathcal{L}_{par}}$},
+%    transform shape,
+%    scale=1.2
+   ]
+    \node[state,initial,accept] (q0) {$q_0$};
+    \node[state,right of=q0]    (q1) {$q_1$};
+  %
+    \draw (q0) edge[bend left=20] node {0,1} (q1)
+          (q1) edge[bend left=20] node {0,1} (q0);
+   \end{tikzpicture}
+  \end{center}
+ \end{itemize}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={$\mathcal{L}_\myling = \{w\in\{0,1\}^*\mid w$ contém $00$, mas não contém $011\}$}]
+ \begin{itemize}[leftmargin=*]
+  \item $\mathcal{L}_\myling$ deve ser a linguagem associada ao número de matrícula de cada aluno.
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item Autômato finito determinístico que reconhece as cadeias da linguagem  $\mathcal{L}_\myling$ (o aconselhável é que seja o DFA mínimo):
+  \begin{center}
+   \begin{tikzpicture}[
+%    node distance=2.cm,
+%    transform shape,
+%    scale=1.2
+   ]
+    \node[state,initial]            (s0) {$s_0$};
+    \node[state,right of=s0]        (s1) {$s_1$};
+    \node[state,right of=s1, accept]        (s2) {$s_2$};
+    \node[state,below of=s1] (s3) {$s_3$};
+    \node[state,right of=s3,reject] (s4) {$s_4$};
+    \node[state,right of=s2,accept] (s5) {$s_5$};
+  %
+    \draw (s0) edge               node {0}   (s1)
+               edge[loop above]   node {1}   (s0)
+          (s1) edge   node {0}   (s2)
+               edge     [bend left=20]          node {1}   (s3)
+          (s2) edge   [loop above]            node {0}   (s2)
+               edge[bend left=30] node {1}   (s5)
+          (s3) edge[bend left=20]   node {0}   (s1)
+               edge node {1}   (s4)
+          (s4) edge[loop below] node {0,1}   (s4)
+          (s5) edge[bend left=30]   node {0} (s2) edge[bend left=30]   node{1} (s4) ;
+   \end{tikzpicture}
+  \end{center}
+ \end{itemize}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={$\mathcal{L}(M_{\mathcal{L}_{par}} \otimes M_{\mathcal{L}_\myling})  \equiv \mathcal{L}_{par} \cap \mathcal{L}_\myling \equiv \{w\mid |w| \text{ é par e } w \text{ contém 00, mas não contém 011}\}.$}]
+ \begin{itemize}[leftmargin=*]
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item Autômato finito determinístico que reconhece as cadeias da linguagem $\mathcal{L}(M_{\mathcal{L}_{par}}\otimes M_{\mathcal{L}_\myling})$:
+  \begin{align*}
+     D_{\otimes} & = \langle \Sigma, S,s_0{\cdot}q_0, \delta,F\rangle,\shortintertext{onde:}
+     \Sigma & =\{0,1\},\\
+     S & =\{s_0{\cdot}q_0,s_0{\cdot}q_1,s_1{\cdot}q_0,\allowbreak s_1{\cdot}q_1,s_2{\cdot}q_1,s_3{\cdot}q_0,s_3{\cdot}q_1,s_4{\cdot}q_0,s_4{\cdot}q_1,s_5{\cdot}q_1\},\\
+     F & =\{s_2{\cdot}q_0,s_5{\cdot}q_0\},
+  \end{align*}
+  com a função $\delta$ definida por:
+    $$\begin{array}{|c|cc|}
+     \hline
+     \delta        & 0             & 1\\
+     \hline
+     s_0{\cdot}q_0 & s_1{\cdot}q_1 & s_0{\cdot}q_1\\
+     s_0{\cdot}q_1 & s_1{\cdot}q_0 & s_0{\cdot}q_0\\
+     s_1{\cdot}q_0 & s_2{\cdot}q_1 & s_3{\cdot}q_1\\
+     s_1{\cdot}q_1 & s_2{\cdot}q_0 & s_3{\cdot}q_0\\
+     s_2{\cdot}q_0 & s_2{\cdot}q_1 & s_5{\cdot}q_1\\
+     s_2{\cdot}q_1 & s_2{\cdot}q_0 & s_5{\cdot}q_0\\
+     s_3{\cdot}q_0 & s_1{\cdot}q_1 & s_4{\cdot}q_1\\
+     s_3{\cdot}q_1 & s_1{\cdot}q_0 & s_4{\cdot}q_0\\
+     s_4{\cdot}q_0 & s_4{\cdot}q_1 & s_4{\cdot}q_1\\
+     s_4{\cdot}q_1 & s_4{\cdot}q_0 & s_4{\cdot}q_0\\
+     s_5{\cdot}q_0 & s_2{\cdot}q_1 & s_4{\cdot}q_1\\
+     s_5{\cdot}q_1 & s_2{\cdot}q_0 & s_4{\cdot}q_0\\
+     \hline
+    \end{array}$$
+ \end{itemize}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={$\mathcal{L}(M_{\mathcal{L}_{par}} \otimes M_{\mathcal{L}_\myling}) \equiv \mathcal{L}_{par} \cap \mathcal{L}_{\myling} \equiv \{w\mid |w| \text{ é par e } w \text{ contém 00, mas não contém 011}\}.$}]
+ \begin{itemize}[leftmargin=*]
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item Diagrama de estados do autômato finito determinístico $D_{\otimes}$:
+  \begin{center}
+   \begin{tikzpicture}[
+    initial text={$D_{\otimes}$},
+%    node distance=3.cm,
+%    transform shape,
+%    scale=0.8
+   ]
+    \node[state,initial above,ellipse]       (p00) {$s_0{\cdot}q_0$};
+    \node[state,right of=p00,ellipse]        (p11) {$s_1{\cdot}q_1$};
+    \node[state,right of=p11,ellipse,accept]        (p20) {$s_2{\cdot}q_0$};
+    \node[state,below of=p11,ellipse]        (p10) {$s_1{\cdot}q_0$};
+    \node[state,below of=p10,ellipse] (p30) {$s_3{\cdot}q_0$};
+    \node[state,below of=p30,ellipse]        (p31) {$s_3{\cdot}q_1$};
+    \node[state,right of=p31,ellipse,reject] (p40) {$s_4{\cdot}q_0$};
+    \node[state,below of=p00,ellipse]        (p01) {$s_0{\cdot}q_1$};
+    \node[state,below of=p20,ellipse]        (p21) {$s_2{\cdot}q_1$};
+    \node[state,right of=p30,ellipse, reject]        (p41) {$s_4{\cdot}q_1$};
+    \node[state,right of=p21,ellipse] (p51) {$s_5{\cdot}q_1$};
+    \node[state,right of=p41,ellipse,accept] (p50) {$s_5{\cdot}q_0$};
+   %
+    \draw (p00) edge                                          node {0}   (p11)
+                edge[bend left=20]                            node {1}   (p01)
+          (p01) edge[bend left=20]                                          node {0}   (p10)
+                edge[bend left=20]                            node {1}   (p00)
+          (p10) edge[bend left=20]                            node {0}   (p21)
+                edge[bend right=60]                                    node {1}   (p31)
+          (p11) edge[bend left=20]                            node {0}   (p20)
+                edge[bend right=60]                                          node {1}   (p30)
+          (p20) edge[bend right=20]                            node {0}   (p21)
+                edge node {1}   (p51)
+
+          (p21) edge[bend right=40,below right]               node {0}   (p20)
+                edge[bend left=20]            node {1}   (p50)
+
+          (p30) edge[bend right=60]                            node {0}   (p11)
+                edge[bend left=20]                            node {1}   (p41)
+          (p31) edge[bend right=60]                            node {0}   (p10)
+                edge[bend left=20]                            node {1}   (p40)
+          (p40) edge[bend left=20]                            node {0,1}   (p41)
+          (p41) edge[bend left=20]                            node {0,1}   (p40)
+          (p50) edge[bend left=20]                            node {0} (p21)
+          edge  node {1}    (p41)
+          (p51) edge[bend right=70]                            node {0} (p20)
+          edge[bend left=80]  node{1} (p40);
+   \end{tikzpicture}
+  \end{center}
+ \end{itemize}
+\end{tcolorbox}
+%
+%-----------------------------------------------
+\end{document}
+%

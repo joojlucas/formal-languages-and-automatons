@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+
+% ----------------------------------------- Dados do discente
+% Insira os seus dados e do exercício escolhido:
+\def\discente{João Lucas Rodrigues Soares}
+\def\matricula{202003580}
+\def\ua{12}
+\def\myling{{35}} % Informe o número da linguagem selecionada.
+
+% ------------------------------------------ Babel & Geometry
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,top=1.0cm,bottom=2.0cm,left=1.5cm,right=1.5cm]{geometry}
+%
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage[breakable]{tcolorbox}
+
+\newcommand{\deriv}[1]{\stackrel{\scriptscriptstyle #1}{\Longrightarrow}}
+\newcommand{\derivG}[2]{\mathop{\Longrightarrow}\limits_{\scriptscriptstyle #2}^{\scriptscriptstyle #1}}
+
+
+\begin{document}
+% ------------------------------------------------- Cabeçalho
+ \begin{tcolorbox}[rounded corners, colback=blue!3, colframe=blue!40!black]
+  \footnotesize\textbf{Universidade Federal de Goiás -- UFG}\hfill \textsc{Linguagens Formais e Autômatos -- 2022/2}\\
+  \footnotesize\textbf{Instituto de Informática -- INF\hfill Prof. Humberto J. Longo} -- \scriptsize\texttt{longo@inf.ufg.br}
+ \end{tcolorbox}\bigskip
+%
+% ------------------------------------------------- Atividade
+\begin{tcolorbox}[rounded corners, colback=blue!2, colframe=blue!40!black, title=\textbf{Atividade AA-\ua}]
+  Nesta tarefa deve-se ($i$) propor uma gramática livre de contexto $G_n$ que gere a linguagem $\mathcal{L}_n$ selecionada e ($ii$) provar que a linguagem $\mathcal{L}(G_n)$, gerada pela gramática $G_n$, é igual à linguagem $\mathcal{L}_n$, ou seja, $\mathcal{L}(G_n)=\mathcal{L}_n$. (Cada aluna(o) deve consultar na descrição da atividade AA--\ua, na disciplina INF0333A da plataforma Turing, qual é a linguagem associada ao seu número de matrícula. A descrição da linguagem está disponível no arquivo ``Lista de linguagens livres de contexto'' da Seção ``Coletânea de exercícios''.)
+\end{tcolorbox}\bigskip
+
+%
+% ------------------------------------ Resolução do exercício
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={\discente\ (\matricula)}]
+\begin{itemize}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item $\mathcal{L}_{\myling} =  \{w \in \Sigma^* = \{1,0\} \mid w = 0^n10^{2n}\  ou\ w = 1^n01^{3n}, n \in \mathbb{N}\}$.
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item Gramática $G_{\myling}$ que gera as cadeias da linguagem $\mathcal{L}_{\myling}$:\\
+  
+  $G_{\myling}=(\{S,A,B\},\{0,1\},P,S)$, com
+  $
+   P =
+   \left\{\begin{array}{l}
+    S\to A\mid B\\
+    A\to 0A00\mid 1\\
+    B\to 1B111\mid 0
+   \end{array}\right\}.
+  $
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ \end{itemize}
+\end{tcolorbox}\bigskip
+
+%=========================================================================
+\begin{tcolorbox}[breakable,rounded corners, colback=yellow!5, colframe=red!40!black, title={$\mathcal{L}_{\myling} \subseteq\mathcal{L}(G_{99})$, ou seja, se $w\in \mathcal{L}_{\myling}$, então $S \deriv{*} w$.}]
+Qualquer cadeia $w\in \mathcal{L}_{\myling}$ pode ser obtida a partir de $G_{99}$ a partir dos seguintes procedimentos de derivação:
+		\begin{alignat*}{2}
+		\cline{1-4}
+%		\hline
+		   & \textbf{Derivação}   &\qquad& \textbf{Regra usada}\\[-10pt]
+		\cline{1-4}
+		 S & \deriv{1} A                & &S \to A\\ 
+		   & \deriv{n} 0^nA(00)^n                & &A \to 0A00 \\
+     & \deriv{1} 0^n1(00)^n   & &A \to 1 \\ 
+		   & \deriv{}  0^n10^{2n} & & \\[-8pt]
+		\cline{1-4}
+		 S & \deriv{1} B                         & & S \to B \\
+	    & \deriv{1} 1^nB(111)^n             & & B \to 1B11 \\ 
+     & \deriv{1} 1^n0(111)^n             & & B \to 0 \\ 
+		   & \deriv{}  1^n01^{3n}          & & \\[-10pt]
+		\cline{1-4}
+		\end{alignat*}
+  Portanto, se $w = 0^n10^{2n}$, com $n,m \geqslant 0$, então $S \derivG{*}{G_{99}} w$.
+\end{tcolorbox}
+%=========================================================================
+\begin{tcolorbox}[breakable,rounded corners, colback=yellow!5, colframe=red!40!black, title={$\mathcal{L}(G_{99})\subseteq \mathcal{L}_{\myling}$, ou seja, se $S \deriv{*} w$, então $w = 0^n10^{2n},\ n,m \geqslant 0$.}]
+Sejam $|u|_x$ o número de ocorrências do símbolo $x$ na cadeia $u$, $|u|_{xp}$ o número de ocorrências do símbolo $x$ como prefixo de $u$ e $|u|_{xs}$ o número de ocorrências do símbolo $x$ como sufixo de $u$.
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ As relações seguintes são válidas para qualquer forma sentencial $u$ gerada por $G_{99}$:
+\begin{enumerate}[label=(\roman*),ref=(\roman*)]
+	\item \label{r1} $2\cdot |u|_{ap} = |u|_{as}$;
+	\item \label{r2} se $u=u_1Xu_2$ e $X \in V$, então $|u_1|_{b}=|u_2|_{c}=2m,\ m \in \mathbb{N}$ (ou seja, quantidade par de símbolos se $u$ é uma forma sentencial, mas não é uma cadeia);
+	\item \label{r3} os $a$'s aparecem somente como prefixo e sufixo, todos os $b$'s precedem todos os $c$'s e os $b$'s não aparecem como prefixo; e
+	\item \label{r4} em uma cadeia $u$, $|u|_{b}=|u|_{c}= 2m+1, \ m \in \mathbb{N}$ (ou seja, se temos uma cadeia de símbolos terminais, a quantidade de $b$'s é igual à de $c$'s e é ímpar.)
+\end{enumerate}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ A seguir será provado, por indução na quantidade de passos de derivação, que as relações \ref{r1}--\ref{r4} são válidas para qualquer cadeia derivável a partir de $S$.
+\begin{description}
+	\item[Base:] As relações são válidas para todas as cadeias que podem ser obtidas a partir de $S$ com a aplicação de apenas uma regra de derivação: 
+	$$S \deriv{1} 1\text{ ou }S \deriv{1} 0.$$	
+	\item[Hipótese de Indução:] As relações são válidas para todas as cadeias $u$ que podem ser obtidas a partir de $S$ com a aplicação de até $k$ regras de derivação ($S \deriv{k}u$).
+	\item[Passo indutivo:] Seja $w$ uma cadeia derivável a partir de $S$ em $k+1$ passos de derivação, ou seja, $S \deriv{k+1}w$. Essa derivação pode ser escrita como $S \deriv{k}u \deriv{1}w$. Pela hipótese indutiva, as relações \ref{r1}--\ref{r4} são válidas para as formas sentenciais deriváveis a partir de $S$ com a aplicação de até $k$ regras de derivação, ou seja, são válidas para $u$. Queremos mostrar que a aplicação de mais uma regra não muda as relações descritas. A tabela a seguir mostra o efeito da aplicação de mais uma regra de derivação à forma sentencial $u$:
+		$$
+		\begin{array}{lllllll}
+   \toprule
+		 \textbf{Regra} & \pmb{|w|_{0p}} & \pmb{|w|_{0s}} & \pmb{|w|_{1s}} & \pmb{|w|_{1p}} & \pmb{|w|_{1}} & \pmb{|w|_{0}} \\ 
+ 		\midrule
+ 		S \to A     & |u|_{0p} & |u|_{0s} & |u|_{1s}    & |u|_{1p} & |u|_1 & |u|_0\\ 
+ 		
+ 		A \to 0A00    & |u|_{0p}+1   & |u|_{0s}+2   & |u|_{1s} & |u|_{1p} & |u|_1 & |u|_0\\ 
+ 		A \to 1        & |u|_{0p}   & |u|_{0s}   & |u|_{1s}     & |u|_{1p} & |u|_1+1 & |u|_0\\ 
+            S \to B        & |u|_{0p}   & |u|_{0s}   & |u|_{1s}     & |u|_{1p} & |u|_1 & |u|_0\\ 
+ 		B \to 1B111       & |u|_{0p}   & |u|_{0s}   & |u|_{1s} +3  & |u|_{1p}+1 & |u|_1 & |u|_0\\
+ 		B \to 0       & |u|_{0p}   & |u|_{0s}   & |u|_{1s}  & |u|_{1p} & |u|_1 & |u|_0+1\\ 
+ 		\bottomrule 
+		\end{array} 
+		$$
+	Pela análise das entradas na tabela, pode-se concluir que as relações \ref{r1}--\ref{r4} são mantidas para a cadeia $w$.
+ \end{description}
+\end{tcolorbox}
+%=========================================================================
+\end{document}
+%

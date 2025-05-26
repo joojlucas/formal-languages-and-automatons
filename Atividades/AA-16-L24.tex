@@ -1,0 +1,130 @@
+\documentclass[12pt]{article}
+
+% ----------------------------------------- Dados do discente
+% Insira os seus dados e do exercício escolhido:
+\def\discente{João Lucas Rodrigues Soares}
+\def\matricula{202003580}
+\def\ua{16}
+\def\up{15}
+\def\myling{{24}} % Informe o número da linguagem selecionada.
+
+% ------------------------------------------ Babel & Geometry
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,top=1.0cm,bottom=2.0cm,left=1.5cm,right=1.5cm]{geometry}
+%
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage[breakable]{tcolorbox}
+%
+\usepackage{tikz}
+\usetikzlibrary{automata,arrows,positioning,shapes}
+\tikzset{
+ node distance=3cm,
+ initial text={$P_{\myling}$},
+ double distance=1pt,
+ every state/.style={semithick,fill=blue!20!white,minimum size=20pt,inner sep=0pt},
+ every edge/.style={draw,->,>=stealth,auto,semithick,font=\ttfamily\small}
+}
+%
+% -------------------------------------------------- New commands
+%\newcommand{\tvs}{{\large\bf \textvisiblespace}}
+\newcommand\vs[1][.8em]{% Visible space!
+ \makebox[#1]{%
+  \kern.07em
+  \vrule height.5ex
+  \hrulefill
+  \vrule height.5ex
+  \kern.07em
+ }
+}
+\newcommand{\ve}{\ensuremath{\varepsilon}}
+
+\begin{document}
+% ------------------------------------------------- Cabeçalho
+ \begin{tcolorbox}[rounded corners, colback=blue!3, colframe=blue!40!black]
+  \footnotesize\textbf{Universidade Federal de Goiás -- UFG}\hfill \textsc{Linguagens Formais e Autômatos -- 2022/2}\\
+  \footnotesize\textbf{Instituto de Informática -- INF\hfill Prof. Humberto J. Longo} -- \scriptsize\texttt{longo@inf.ufg.br}
+ \end{tcolorbox}\bigskip
+%
+% ------------------------------------------------- Atividade
+\begin{tcolorbox}[rounded corners, colback=blue!2, colframe=blue!40!black, title=\textbf{Atividade AA-\ua}]
+ Nesta tarefa deve-se propor um PDA que reconheça (por estado final e pilha vazia) as cadeias da linguagem $\mathcal{L}_n$ selecionada. (Cada aluna(o) deve consultar na descrição da atividade AA--\ua, na disciplina INF0333A da plataforma Turing, qual é a linguagem associada ao seu número de matrícula. A descrição da linguagem está disponível no arquivo ``Lista de linguagens livres de contexto'' da Seção ``Coletânea de exercícios''.)
+\end{tcolorbox}\bigskip
+
+%
+% ------------------------------------ Resolução do exercício
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={\discente\ (\matricula)}]
+\begin{itemize}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item $\mathcal{L}_{\myling} = \{w \in \Sigma^* = \{0,1\} \mid w = 0^m1^n0^q,\ m>5,\ n>3,\ q\leq n,\ m,\ n,\ q \in \mathbb{N}\}$.
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item PDA $P_{\myling}$ que reconhece as cadeias da linguagem $\mathcal{L}_{\myling}$:
+\end{itemize}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%\begin{center}
+\hspace*{-0,5cm}
+\begin{tikzpicture}[
+  accept/.style={accepting,fill=green!20!white},
+  reject/.style={accepting,fill=red!20!white},
+  slopea/.style={sloped,anchor=center,above},
+  slopeb/.style={sloped,anchor=center,below},
+  transform shape,
+  scale=0.9
+ ]
+  \node[initial,state]            (s0) {$s_0$};
+  \node[state,right of=s0]        (s1) {$s_1$};
+  \node[state,above of=s1]        (s2) {$s_2$};
+  \node[state,above of=s2]        (s3) {$s_3$};
+  \node[state,right of=s3]        (s4) {$s_4$};
+  \node[state,right of=s4]        (s5) {$s_5$};
+  \node[state,right of=s5]        (s6) {$s_6$};
+  \node[state,right of=s6]        (s7) {$s_7$};
+  \node[state,below of=s7]        (s8) {$s_8$};
+  \node[state,below of=s8]        (s9) {$s_9$};
+  \node[state,below of=s9]        (s10) {$s_{10}$};
+  \node[state,left of=s10]        (s11) {$s_{11}$};
+  \node[state,left of=s11]        (s12) {$s_{12}$};
+  \node[state,accept,left of=s12] (sa) {$s_a$};
+  \node[state,above of=sa]        (s13) {$s_{13}$};;
+  
+
+  \path (s0) edge node {$\ve,\ve\to \$$}               (s1)
+        (s1) edge node {$0,\ve\to \ve$}         (s2)
+        (s2) edge node {$0,\ve\to \ve$}       (s3)
+        (s3) edge node [slopea] {$0,\ve\to \ve$}         (s4)
+        (s4) edge node [slopea] {$0,\ve\to \ve$}         (s5)
+        (s5) edge node [slopea] {$0,\ve\to \ve$}         (s6)
+        (s6) edge node [slopea] {$0,\ve\to \ve$}          (s7)
+        (s7) edge [loop above]
+                  node {$0,\ve\to \ve$}                   (s7)
+             edge node {$1,\ve\to x$}        (s8)
+        (s8) edge node {$1,\ve\to x$}        (s9)
+        (s9) edge node {$1,\ve\to x$}        (s10)
+        (s10) edge node[slopea] {$1,\ve\to x$}        (s11)
+        (s11) edge [loop above]
+                  node {$1,\ve\to x$}                   (s11)
+             edge node[slopea] {$\ve,\ve\to \ve$}        (s12)
+        (s12) edge [loop below]
+                  node {$0,x\to \ve$}                   (s12)
+             edge [bend right=15]node[slopea] {$\ve,x\to \ve$}        (s13)
+             edge node[slopea] {$\vs,\$\to \ve$}        (sa)
+        (s13) edge [loop above]
+                  node {$\ve,x\to \ve$}                   (s13)
+             edge [bend right=15] node {$\vs,\$\to \ve$}        (sa);
+        
+\end{tikzpicture}
+\begin{itemize}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item Observação importante: o estado de rejeição foi reprimido para que o PDA não fique muito extenso e dificulte a compreensão do mesmo.
+\end{itemize}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+%\end{center}
+%\end{itemize}
+\end{tcolorbox}
+%=========================================================================
+\end{document}
+%

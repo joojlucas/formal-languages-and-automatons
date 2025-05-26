@@ -1,0 +1,238 @@
+\documentclass[12pt]{article}
+
+% ----------------------------------------- Dados do discente
+% Insira os seus dados e do exercício escolhido:
+\def\discente{João Lucas Rodrigues Soares}
+\def\matricula{202003580}
+\def\ua{09}
+\def\myling{{44}} % Informe o número da linguagem selecionada.
+
+% ------------------------------------------ Babel & Geometry
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,top=0.5cm,bottom=1.5cm,left=1.5cm,right=1.5cm,nohead,nofoot]{geometry}
+%
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+
+\usepackage{tikz}
+\usetikzlibrary{automata,shapes,arrows,positioning}
+\tikzset{
+ node distance=2.5cm,
+ initial text={$M_{\mathcal{L}_\myling}$},
+ double distance=1pt,
+ every state/.style={semithick,fill=blue!20!white,minimum size=20pt,inner sep=0pt},
+ every edge/.style={draw,->,>=stealth,auto,semithick,font=\ttfamily\small},
+ accept/.style={accepting,fill=green!20!white},
+ reject/.style={fill=red!20!white},
+ slopea/.style={sloped,anchor=center,above},
+ slopeb/.style={sloped,anchor=center,below}
+}
+
+%=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= N e w   c o m m a n d s
+\newcommand{\ve}{\ensuremath{\varepsilon}}
+
+\begin{document}
+% ------------------------------------------------- Cabeçalho
+ \begin{tcolorbox}[rounded corners, colback=blue!3, colframe=blue!40!black]
+  \footnotesize\textbf{Universidade Federal de Goiás -- UFG}\hfill \textsc{Linguagens Formais e Autômatos -- 2022/2}\\
+  \footnotesize\textbf{Instituto de Informática -- INF\hfill Prof. Humberto J. Longo} -- \scriptsize\texttt{longo@inf.ufg.br}
+ \end{tcolorbox}\bigskip
+%
+% ------------------------------------------------- Atividade
+\begin{tcolorbox}[rounded corners, colback=blue!2, colframe=blue!40!black, title=\textbf{Atividade AA-\ua}]
+  Nesta tarefa deve-se propôr um autômato finito não determinístico $N$ que reconheça as cadeias da linguagem selecionada, a partir de $N$ deve-se usar o algoritmo baseado em GNFA's para extrair uma expressão regular que gere as cadeias da linguagem reconhecida pelo NFA. O autômato $N$ pode ser um NFA ou NFA-$\varepsilon$, com pelo menos uma transição não determinística ou transição $\varepsilon$. \textbf{Atenção:} NFA's criados a partir do simples acréscimo de transições $\delta(s_i,\varepsilon)=s_i$ ($\varepsilon$-laços) a um DFA não serão considerados corretos, por não permitirem uma avaliação razoável do aprendizado dos conceitos abordados nesta atividade avaliativa. (Cada aluna(o) deve consultar na descrição da atividade AA--\ua, na disciplina INF0333A da plataforma Turing, qual é a linguagem associada ao seu número de matrícula. A descrição da linguagem está disponível no arquivo ``lista de linguagens regulares'' da Seção ``Coletânea de exercícios''.)
+\end{tcolorbox}\bigskip
+
+%
+% ------------------------------------ Resolução do exercício
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={\discente\ (\matricula)}]
+ \begin{itemize}[leftmargin=*]
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  \item $\mathcal{L}_\myling = \{w\in \Sigma^*= \{0,1\}^* \mid |w| _0 = 2k, k \in \mathbb{N}$, e w começa com 1 ou termina com $11\}$
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  \item $ER(\mathcal{L}_\myling) = 1^*(011^+011^+)^*$.
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ \end{itemize}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={Autômato finito não determinístico que reconhece as cadeias de $\mathcal{L}_\myling$}]
+ \centering
+ \begin{tikzpicture}[
+  initial text={$N_\myling$},
+%    transform shape,
+%    scale=0.8
+ ]
+    \node[state,initial,accept]              (s0) {$s_0$};
+    \node[state,above right=1cm of s0]        (s1) {$s_1$};
+    \node[state,below right=1cm of s0]        (s2) {$s_2$};
+    \node[state,right of=s1]                  (s3) {$s_3$};
+    \node[state,right of=s2]                  (s4) {$s_4$};
+    \node[state,above right=1cm of s4] (s5) {$s_5$};
+  %
+    \draw (s0) edge [bend left=20]  node {0} 
+          (s1) edge [loop right] node {1} (s1)
+          (s1) edge [loop above]node {1}  (s1)
+          (s1) edge node {1}  (s3)
+          (s3) edge [bend left=20]    node {1} (s5)
+          (s5) edge [loop right]node {1}  (s5)
+          (s5) edge [bend left=20]   node {0} (s4)
+          (s4) edge [loop above]node {1}  (s4)
+          (s4) edge node {1}  (s2)
+          (s2) edge [bend left=20]           node {1} (s0);
+ \end{tikzpicture}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={GNFA $G_0$ obtido a partir do NFA $N_\myling$}]
+ \begin{tikzpicture}
+  [
+   initial text={$G_0$},
+%    transform shape,
+%    scale=1.3
+  ]
+    \node[state,initial]               (si) {$I$};
+    \node[state,right of=si]              (s0) {$s_0$};
+    \node[state,above right=2cm of s0]        (s1) {$s_1$};
+    \node[state,below right=2cm of s0]        (s2) {$s_2$};
+    \node[state,right of=s1]                  (s3) {$s_3$};
+    \node[state,right of=s2]                  (s4) {$s_4$};
+    \node[state,above right=2cm of s4] (s5) {$s_5$};
+    \node[state,right of=s5,accept]    (sf) {$F$};
+  %
+    \draw (si) edge                         node {\ve} (s0)
+          (s0) edge [bend left = 22]  node {\ve} (sf)
+          (s0) edge [bend left=20]  node {0} 
+          (s1) edge [loop right] node {1} (s1)
+          (s1) edge [loop above]node {1}  (s1)
+          (s1) edge node {1}  (s3)
+          (s3) edge [bend left=20]    node {1} (s5)
+          (s5) edge [loop right]node {1}  (s5)
+          (s5) edge [bend left=20]   node {0} (s4)
+          (s4) edge [loop above]node {1}  (s4)
+          (s4) edge node {1}  (s2)
+          (s2) edge [bend left=20]           node {1} (s0);
+   \end{tikzpicture}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={GNFA $G_1$ obtido a partir do GNFA $G_0$ após a remoção do estado $s_0$}]
+ \begin{tikzpicture}
+  [
+   initial text={$G_4$},
+%    transform shape,
+%    scale=1.3
+  ]
+    \node[state,initial]               (si) {$I$};
+    \node[state,above right=2cm of si]        (s1) {$s_1$};
+    \node[state,below right=2cm of si]        (s2) {$s_2$};
+    \node[state,right of=s1]                  (s3) {$s_3$};
+    \node[state,right of=s2]                  (s4) {$s_4$};
+    \node[state,above right=2cm of s4] (s5) {$s_5$};
+    \node[state,right of=s5,accept]    (sf) {$F$};
+  %
+    \draw 
+          (si) edge [bend left = 22]  node {\ve} (sf)
+          (si) edge [bend left=20]  node {0} 
+          (s1) edge [loop right] node {1} (s1)
+          (s1) edge [loop above]node {1}  (s1)
+          (s1) edge node {1}  (s3)
+          (s3) edge [bend left=20]    node {1} (s5)
+          (s5) edge [loop right]node {1}  (s5)
+          (s5) edge [bend left=20]   node {0} (s4)
+          (s4) edge [loop above]node {1}  (s4)
+          (s4) edge node {1}  (s2)
+          (s2) edge [bend left=20]           node {1} (si);
+   \end{tikzpicture}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={GNFA $G_2$ obtido a partir do GNFA $G_1$ após a  alteração dos estados $s_1$, $s_4$ e $s_5$}]
+ \centering
+ \begin{tikzpicture}
+  [
+   initial text={$G_6$},
+%    transform shape,
+%    scale=1.3
+  ]
+    \node[state,initial]               (si) {$I$};
+    \node[state,above right=2cm of si]        (s1) {$s_1$};
+    \node[state,below right=2cm of si]        (s2) {$s_2$};
+    \node[state,right of=s1]                  (s3) {$s_3$};
+    \node[state,right of=s2]                  (s4) {$s_4$};
+    \node[state,above right=2cm of s4] (s5) {$s_5$};
+    \node[state,right of=s5,accept]    (sf) {$F$};
+  %
+    \draw 
+          (si) edge [bend left = 22]  node {\ve} (sf)
+          (si) edge [loop right] node {1} (si)
+          (si) edge [bend left=20]  node {$1^*0$}  (s1)
+          (s1) edge node {$1^*$}  (s3)
+          (s3) edge [bend left=20]    node {1} (s5)
+          (s5) edge [bend left=20]   node {$1^*0$} (s4)
+          (s4) edge node {$1^*$}  (s2)
+          (s2) edge [bend left=20]           node {1} (si);
+   \end{tikzpicture}
+\end{tcolorbox}\bigskip
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={GNFA $G_3$ obtido a partir do GNFA $G_2$ após a remoção dos estados $s_2$ e $s_3$}]
+ \begin{tikzpicture}
+  [
+   accept/.style={accepting,fill=green!20!white},
+   initial text={$G_8$},
+%    node distance=2.cm,
+%    transform shape,
+%    scale=1.3
+  ]
+    \node[state,initial]               (si) {$I$};
+    \node[state,above right=1cm of si]        (s1) {$s_1$};
+    \node[state,below of=s1]                  (s4) {$s_4$};
+    \node[state,above right=1cm of s4] (s5) {$s_5$};
+    \node[state,right of=s5,accept]    (sf) {$F$};
+  %
+    \draw 
+          (si) edge [bend left = 23]  node {\ve} (sf)
+          (si) edge [loop right] node {1} (si)
+          (si) edge [bend left=20]  node {$1^*0$}  (s1)
+          (s1) edge [bend left=50] node {$1^*1$}  (s5)
+          (s5) edge [bend left=20]   node {$1^*0$} (s4)
+          (s4) edge [bend left=20]           node {$1^*1$} (si);
+   \end{tikzpicture}
+\end{tcolorbox}\bigskip
+%%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={GNFA $G_4$ obtido a partir do GNFA $G_3$ após a remoção dos estados $s_1$ e $s_4$}]
+ \begin{tikzpicture}
+  [
+   initial text={$G_9$},
+%    transform shape,
+%    scale=1.3
+  ]
+    \node[state,initial]               (si) {$I$};
+    \node[state,right of=si] (s5) {$s_5$};
+    \node[state,right of=s5,accept]    (sf) {$F$};
+  %
+    \draw 
+          (si) edge [bend left = 65]  node {\ve} (sf)
+          (si) edge [loop right] node {1} (si)
+          (si) edge [bend left=35]  node {$011^+$}  (s5)
+          (s5) edge [bend left=35] node {$011^+$}  (si);
+   \end{tikzpicture}
+\end{tcolorbox}\bigskip
+%%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={GNFA $G_5$ obtido a partir do GNFA $G_4$ após a remoção do estado $s_5$}]
+ \begin{tikzpicture}
+  [
+   initial text={$G_{10}$},
+%    transform shape,
+%    scale=1.3
+  ]
+    \node[state,initial]                                          (si) {$I$};
+    \node[state,right=14.0cm of si,accepting,fill=green!20!white] (sf) {$F$};
+  %
+    \draw (si) edge node {$1^*(011^+011^+)^*$} (sf);
+   \end{tikzpicture}
+\end{tcolorbox}
+%=========================================================================
+\end{document}
+%

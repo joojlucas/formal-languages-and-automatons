@@ -1,0 +1,80 @@
+\documentclass[12pt]{article}
+
+% ----------------------------------------- Dados do discente
+% Insira os seus dados e do exercício escolhido:
+\def\discente{João Lucas Rodrigues Soares}
+\def\matricula{202003580}
+\def\ua{15}
+\def\up{14}
+\def\myling{{19}} % Informe o número da linguagem selecionada.
+
+% ------------------------------------------ Babel & Geometry
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,top=1.0cm,bottom=2.0cm,left=1.5cm,right=1.5cm]{geometry}
+%
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage[breakable]{tcolorbox}
+%
+\newcommand{\ve}{\ensuremath{\varepsilon}}
+
+\begin{document}
+% ------------------------------------------------- Cabeçalho
+ \begin{tcolorbox}[rounded corners, colback=blue!3, colframe=blue!40!black]
+  \footnotesize\textbf{Universidade Federal de Goiás -- UFG}\hfill \textsc{Linguagens Formais e Autômatos -- 2022/2}\\
+  \footnotesize\textbf{Instituto de Informática -- INF\hfill Prof. Humberto J. Longo} -- \scriptsize\texttt{longo@inf.ufg.br}
+ \end{tcolorbox}\bigskip
+%
+% ------------------------------------------------- Atividade
+\begin{tcolorbox}[rounded corners, colback=blue!2, colframe=blue!40!black, title=\textbf{Atividade AA-\ua}]
+ Nesta tarefa deve-se converter a gramática $G_n^5$, obtida na atividade avaliativa anterior (AA-\up\ relativa a transformações em GLC's), para a forma normal de Chomsky \textbf{OU} para a forma normal de Greibach. (Cada aluno(a) deve consultar na descrição da atividade AA--\up, na disciplina INF0333A da plataforma Turing, qual é a linguagem associada ao seu número de matrícula. A descrição da linguagem está disponível no arquivo ``Lista de linguagens livres de contexto'' da Seção ``Coletânea de exercícios''.)
+\end{tcolorbox}\bigskip
+
+%
+% ------------------------------------ Resolução do exercício
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={\discente\ (\matricula)}]
+\begin{itemize}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item  $\mathcal{L}_{\myling} = \{w \in \Sigma^* = \{1,0\}^* \mid w = 0^m1^m0^n,  m, n \in \mathbb{N}\}$
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item Gramática $G_{\myling}^5$ (obtida na AA-\up) que gera as cadeias da linguagem $\mathcal{L}_{\myling}$:\\
+  $G_{\myling}^5=(V,\Sigma,P,S_0)=(\{A,S,S_0,R\},\{0,1\},P,S_0)$, com
+    \[P=\left\{
+     \begin{aligned}
+      S_0 & \to S0\mid 0A1 \mid 01 \mid 0 \mid \ve,\\
+      S & \to 0A1 \mid 01 \mid 0 \mid 0A1R \mid 01R \mid 0R, \\
+      R & \to 0R \mid 0, \\
+      A & \to 0A1 \mid 01 \\
+     \end{aligned}
+    \right\}\]
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ \end{itemize}
+\end{tcolorbox}\bigskip
+
+%=========================================================================
+\begin{tcolorbox}[breakable,rounded corners, colback=yellow!5, colframe=red!40!black, title={Forma normal de Chomsky.}]
+%-----------------------------------------------
+\begin{itemize}
+  \item Gramática $G_{\myling}^6$ na forma normal de Chomsky, obtida a partir de $G_{\myling}^5$, que gera as cadeias da linguagem $\mathcal{L}_{\myling}$:\\
+  $G_{\myling}^6=(V,\Sigma,P,S_0)=(\{A,B,S,S_0,R,T_1,T_2\},\{a,b\},P,S_0)$, com
+    \[P=\left\{
+     \begin{aligned}
+      S_0 & \to ST_1\mid T_1T_3 \mid T_1T_2 \mid 0 \mid \ve,\\
+      S & \to T_1T_3 \mid T_1T_2 \mid 0 \mid T_4R \mid T_4 \mid T_1T_5 \mid T_1R, \\
+      R & \to T_1R \mid 0, \\
+      A & \to T_1T_3 \mid T_1T_2 \\
+      T_1 &\to 0\\
+      T_2 &\to 1\\
+      T_3 &\to AT_2\\
+      T_4 &\to T_1T_3\\
+      T_5 &\to T_2R\\
+     \end{aligned}
+    \right\}\]
+\end{itemize}
+\end{tcolorbox}
+\end{document}
+%

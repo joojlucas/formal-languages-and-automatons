@@ -1,0 +1,125 @@
+\documentclass[12pt]{article}
+
+% ----------------------------------------- Dados do discente
+% Insira os seus dados e do exercício escolhido:
+\def\discente{João Lucas Rodrigues Soares}
+\def\matricula{202003580}
+\def\ua{13}
+\def\myling{{35}} % Informe o número da linguagem selecionada.
+
+% ------------------------------------------ Babel & Geometry
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,top=1.0cm,bottom=2.0cm,left=1.5cm,right=1.5cm]{geometry}
+%
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage[breakable]{tcolorbox}
+%
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+%
+
+\newcommand{\ve}{\ensuremath{\varepsilon}}
+%\newcommand{\deriv}[1]{\stackrel{\scriptscriptstyle #1}{\Longrightarrow}}
+%\newcommand{\derivG}[2]{\mathop{\Longrightarrow}\limits_{\scriptscriptstyle #2}^{\scriptscriptstyle #1}}
+
+\begin{document}
+% ------------------------------------------------- Cabeçalho
+ \begin{tcolorbox}[rounded corners, colback=blue!3, colframe=blue!40!black]
+  \footnotesize\textbf{Universidade Federal de Goiás -- UFG}\hfill \textsc{Linguagens Formais e Autômatos -- 2022/2}\\
+  \footnotesize\textbf{Instituto de Informática -- INF\hfill Prof. Humberto J. Longo} -- \scriptsize\texttt{longo@inf.ufg.br}
+ \end{tcolorbox}\bigskip
+%
+% ------------------------------------------------- Atividade
+\begin{tcolorbox}[rounded corners, colback=blue!2, colframe=blue!40!black, title=\textbf{Atividade AA-\ua}]
+  Nesta tarefa deve-se propor uma gramática livre de contexto $G$ que gere a linguagem $\mathcal{L}_n$ selecionada e verificar se $G$ é ambígua. ($i$) Em caso afirmativo, mostre duas derivações à esquerda em $G$ para uma mesma cadeia e proponha uma gramática equivalente $G^\prime$ que não seja ambígua. ($ii$) Caso $G$ não seja ambígua, proponha uma gramática $G^\prime$ equivalente que seja ambígua e mostre duas derivações à esquerda em $G^\prime$ para uma mesma cadeia. (Cada aluno(a) deve consultar na descrição da atividade AA--\ua, na disciplina INF0333A da plataforma Turing, qual é a linguagem associada ao seu número de matrícula. A descrição da linguagem está disponível no arquivo ``Lista de linguagens livres de contexto'' da Seção ``Coletânea de exercícios''.)
+\end{tcolorbox}\bigskip
+
+%
+% ------------------------------------ Resolução do exercício
+
+%=========================================================================
+\begin{tcolorbox}[rounded corners, colback=yellow!5, colframe=red!40!black, title={\discente\ (\matricula)}]
+\begin{itemize}
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item $\mathcal{L}_{\myling} = \{w \in \Sigma^* = \{1,0\} \mid w = 0^n10^{2n}\  ou\ w = 1^n01^{3n}, n \in \mathbb{N}\}$.
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  \item Gramática $G_{\myling}$ que gera as cadeias da linguagem $\mathcal{L}_{\myling}$:\\   $G_{\myling}=(\{S,A,B\},\{0,1\},P,S)$, com
+  $$
+   P =
+   \left\{\begin{array}{l}
+    S\to A\mid B\\
+    A\to 0A00\mid 1\\
+    B\to 1B111\mid 0
+   \end{array}\right\}.
+  $$
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+ \end{itemize}
+\end{tcolorbox}\bigskip
+
+%=========================================================================
+%=========================================================================
+\begin{tcolorbox}[breakable,rounded corners, colback=yellow!5, colframe=red!40!black, title={$G^\prime_{\myling}$ não ambígua.}]
+ \begin{itemize}
+  %- - - - - - - - - - - - - - - -
+  \item A regra de derivação $S\to A$, seguida da regra recursiva $A\to 0A00$, seguida da regra $0A00 \to 1$ da gramática $G_{\myling}$ gera a cadeia $0100$.
+  %- - - - - - - - - - - - - - - -
+  \item A introdução de uma variável $C$ extra pode gerar a ambiguidade da gramática, através da adição junto a variável da regra $C \to 0100$ Assim, a gramática $G^\prime_{\myling}$, ambígua, gera as cadeias da linguagem $G_{\myling}=(\{S,A,B,C\},\{0,1\},P,S)$, com
+  $$
+   P =
+   \left\{\begin{array}{l}
+    S\to A\mid B \mid C\\
+    A\to 0A00\mid 1\\
+    B\to 1B111\mid 0\\
+    C\to 0100\\
+   \end{array}\right\}.
+  $$
+  %- - - - - - - - - - - - - - - -
+  \item Note-se que a gramática é ambígua quando gera a cadeia 0100.
+  %- - - - - - - - - - - - - - - -
+ \end{itemize}
+\end{tcolorbox}
+%=========================================================================
+
+\begin{tcolorbox}[breakable,rounded corners, colback=yellow!5, colframe=red!40!black, title={$G_{\myling}$ é ambígua.}]
+ \begin{itemize}
+  %- - - - - - - - - - - - - - - -
+  \item Derivações à esquerda distintas para a cadeia $w=0100$:
+    \begin{align*}
+   S &\Rightarrow A \Rightarrow 0A00 \Rightarrow 1 \Rightarrow 0100\shortintertext{e}
+   S &\Rightarrow C \Rightarrow 0100.
+  \end{align*}
+  %- - - - - - - - - - - - - - - -
+  \item Árvores de derivações da cadeia $w=0100$:
+  \begin{center}
+   \begin{tikzpicture}[
+    ->,>=stealth',
+    level distance=1.1cm,
+    level 1/.style={sibling distance=1.2cm},
+    level 2/.style={sibling distance=1.8cm},
+    level 3/.style={sibling distance=0.8cm},
+    transform shape,
+    scale=.8
+   ]
+    \node (t1) {$S$}
+      child { node {$A$} 
+        child { node {$0$} }
+        child { node {$A$} 
+            child { node {$1$} }}
+        child { node {$0$} }
+        child { node {$0$} }};
+%      
+    \node[xshift=6cm] (t2) {$S$}
+      child { node {$C$}
+        child { node {$0100$}}};
+   \end{tikzpicture}
+  \end{center}
+  %- - - - - - - - - - - - - - - -
+ \end{itemize}
+\end{tcolorbox}
+%=========================================================================
+\end{document}
+%
